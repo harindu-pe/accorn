@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Home() {
   return (
     <main className="">
-      <Button variant="destructive">Hello</Button>
+      <p>This is an authenticated route.</p>
+      <UserButton afterSignOutUrl="/" />
     </main>
   );
 }
