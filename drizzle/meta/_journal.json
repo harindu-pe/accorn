@@ -1,0 +1,20 @@
+{
+  "version": "6",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1715527470197,
+      "tag": "0000_yielding_sunspot",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1715528395531,
+      "tag": "0001_concerned_microbe",
+      "breakpoints": true
+    }
+  ]
+}
