@@ -9,8 +9,8 @@ export default function Layout({ children }: Props) {
     <>
       <Header />
       <main className="px-3 lg:px-14">
+        Dashboard Layout
         {children}
-        hello layout
       </main>
     </>
   );

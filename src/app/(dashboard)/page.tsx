@@ -1,10 +1,5 @@
-import { UserButton } from "@clerk/nextjs";
+"use client";
 
 export default function Home() {
-  return (
-    <div className="">
-      <p>This is an authenticated route.</p>
-      <UserButton afterSignOutUrl="/" />
-    </div>
-  );
+  return <div className="">Home Page</div>;
 }
