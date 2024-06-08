@@ -1,12 +1,12 @@
 "use client";
 
 import NavButton from "@/components/global/nav-button";
-import { usePathname, useRouter } from "next/navigation";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { useMedia } from "react-use";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useMedia } from "react-use";
 
 const routes = [
   { href: "/", label: "Overview" },
@@ -43,6 +43,7 @@ const Navigation = () => {
           <nav className="flex flex-col gap-y-2 pt-6">
             {routes.map((route) => (
               <Button
+                key={route.href}
                 variant={route.href === pathname ? "secondary" : "ghost"}
                 onClick={() => onClick(route.href)}
                 className="w-full justify-start"
