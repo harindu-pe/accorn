@@ -15,7 +15,6 @@ import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import { useCreateTransaction } from "../api/use-create-transaction";
 import { useNewTransaction } from "../hooks/use-new-transaction";
-import { DatePicker } from "@/components/global/date-picker";
 
 const formSchema = insertTransactionSchema.omit({
   id: true,

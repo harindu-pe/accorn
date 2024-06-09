@@ -8,27 +8,54 @@ import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-
 import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
 import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
 import { Loader2, Plus } from "lucide-react";
+import { useState } from "react";
 import { columns } from "./columns";
-import { DatePickerDemo } from "@/components/global/date-test";
+import { UploadButton } from "./upload-button";
+import { ImportCard } from "./import-card";
+
+enum VARIANTS {
+  LIST = "LIST",
+  IMPORT = "IMPORT",
+}
+
+const INITIAL_IMPORT_RESULTS = {
+  data: [],
+  errors: [],
+  meta: {},
+};
 
 const TransactionsPage = () => {
-  const { onOpen } = useNewTransaction();
-  const deleteAccounts = useBulkDeleteTransactions();
-  const transactionsQuery = useGetTransactions();
-  const accounts = transactionsQuery.data || [];
+  const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
+  const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
-  const isDisabled = transactionsQuery.isLoading || deleteAccounts.isPending;
+  const onUpload = (results: typeof INITIAL_IMPORT_RESULTS) => {
+    setImportResults(results);
+    setVariant(VARIANTS.IMPORT);
+  };
+
+  const onCancelImport = () => {
+    setImportResults(INITIAL_IMPORT_RESULTS);
+    setVariant(VARIANTS.LIST);
+  };
+
+  const { onOpen } = useNewTransaction();
+  const deleteTransactions = useBulkDeleteTransactions();
+  const transactionsQuery = useGetTransactions();
+  const transactions = transactionsQuery.data || [];
+
+  const isDisabled =
+    transactionsQuery.isLoading || deleteTransactions.isPending;
 
   if (transactionsQuery.isLoading) {
     return (
-      <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
+      <div className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
         <Card className="border-none drop-shadow-sm">
           <CardHeader>
             <Skeleton className="h-8 w-48" />
           </CardHeader>
           <CardContent>
-            <div className="h-[500px] w-full flex items-center justify-center">
-              <Loader2 className="size-6 text-slate-300 animate-spin" />
+            <div className="flex h-[500px] w-full items-center justify-center">
+              <Loader2 className="size-6 animate-spin text-slate-300" />
             </div>
           </CardContent>
         </Card>
@@ -36,26 +63,45 @@ const TransactionsPage = () => {
     );
   }
 
+  if (variant === VARIANTS.IMPORT) {
+    return (
+      <>
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={() => {}}
+        />
+      </>
+    );
+  }
+
   return (
-    <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
+    <div className="mx-auto -mt-24 w-full max-w-screen-2xl pb-10">
       <Card className="border-none drop-shadow-sm">
         <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
-          <CardTitle className="text-xl line-clamp-1">
+          <CardTitle className="line-clamp-1 text-xl">
             Transaction History
           </CardTitle>
-          <Button size="sm" onClick={() => onOpen()}>
-            <Plus className="size-4 mr-2" />
-            Add new
-          </Button>
+          <div className="flex flex-col items-center gap-x-2 gap-y-2 lg:flex-row">
+            <Button
+              size="sm"
+              onClick={() => onOpen()}
+              className="w-full lg:w-auto"
+            >
+              <Plus className="mr-2 size-4" />
+              Add new
+            </Button>
+            <UploadButton onUpload={onUpload} />
+          </div>
         </CardHeader>
         <CardContent>
           <DataTable
             columns={columns}
-            data={accounts}
-            filterKey="name"
+            data={transactions}
+            filterKey="payee"
             onDelete={(row) => {
               const ids = row.map((r) => r.original.id);
-              deleteAccounts.mutate({ ids });
+              deleteTransactions.mutate({ ids });
             }}
             disabled={isDisabled}
           />
