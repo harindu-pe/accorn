@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
-import { ImportTable } from "./import-table";
 import { convertAmountToMiliunits } from "@/lib/utils";
 import { format, parse } from "date-fns";
+import { useState } from "react";
+import { ImportTable } from "./import-table";
 
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
-
 const requiredOptions = ["amount", "date", "payee"];
 
 interface SelectedColumnsState {
